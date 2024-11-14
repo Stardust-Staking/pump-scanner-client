@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pump Data Viewer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <style>
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .card {
+      flex: 1 1 calc(33% - 20px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .fixed-image {
+      width: 100px !important;
+      height: 100px !important;
+      object-fit: cover;
+    }
+    .card-image figure {
+      width: 100px !important;
+      height: 100px !important;
+      margin: 10px auto;
+    }
+    .media-left figure {
+      width: 100px !important;
+      height: 100px !important;
+      margin: auto;
+    }
+    footer {
+      margin-top: 20px;
+    }
+    .navbar-brand {
+      margin: 0 !important;
+      width: 100%;
+    }
+    .navbar-brand .title {
+      margin-right: auto;
+    }
+    .navbar-brand .subtitle {
+      margin-top: 0 !important;
+      text-align: right;
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <header class="navbar">
+      <div class="navbar-brand">
+        <h1 class="title">Pump Data Viewer</h1>
+        <p id="stats" class="subtitle">Records per minute: 0, Minutes passed: 0, Total records: 0</p>
+      </div>
+    </header>
+    <div id="output" class="flex-container">Waiting for data...</div>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>&copy; 2024 Pump Data Viewer</p>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const wsUrl = "wss://sniper.allchains.online:8443/";
+    const ws = new WebSocket(wsUrl);
+
+    ws.onmessage = (event) => {
+      const outputElement = document.getElementById('output');
+      outputElement.innerHTML = '';
+
+      const data = JSON.parse(event.data);
+      const rows = data.rows || [];
+      const stats = data.stats || {};
+
+      // Update stats in the header
+      document.getElementById('stats').innerHTML = `Records per minute: ${stats.recordsPerMinute}, Records shown per minute: ${stats.recordsShownPerMinute}<br>Minutes passed: ${stats.uptimeMinutes}<br>Total records: ${stats.recordCount}, Total records shown: ${stats.totalRecordsShown}`;
+
+      rows.forEach(row => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        let innerHTML = `
+                    <div class="card-image">
+                        <figure class="image">
+                            <img class="fixed-image" src="${row.image}" alt="Token Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image">
+                                    <img class="fixed-image" src="${row.twitterProfileImage}" alt="Twitter Profile Image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4">${row.name} (${row.symbol})</p>
+                                <p class="subtitle is-6">@${row.twitterUserName}</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p><strong>Description:</strong> ${row.description}</p>
+                            <p><strong>Twitter Description:</strong> ${row.twitterDescription}</p>
+                            <p><strong>Twitter Followers:</strong> ${row.twitterFollowersCount}</p>
+                            <p><strong>Created On:</strong> ${row.createdOn}</p>
+                            <p><strong>Market Cap (SOL):</strong> ${row.marketCapSol}</p>
+                            <br>`;
+        if (row.twitter) innerHTML += `
+                            <a href="${row.twitter}" target="_blank">${row.twitter}</a>
+                            <br>`;
+        if (row.telegram) innerHTML += `
+                            <a href="${row.telegram}" target="_blank">${row.telegram}</a>
+                            <br>`;
+        if (row.website) innerHTML += `
+                            <a href="${row.website}" target="_blank">${row.website}</a>
+                            <br>`;
+        innerHTML += `
+                            <a href="https://pump.fun/${row.mint}" target="_blank">Pump Fun Link</a>
+                        </div>
+                    </div>
+                `;
+
+        card.innerHTML = innerHTML;
+        outputElement.prepend(card);
+      });
+    };
+
+    ws.onopen = () => {
+      console.log('Connected to server');
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from server');
+    };
+  });
+</script>
+</body>
+</html>
