@@ -122,6 +122,16 @@
                             <br>`;
         innerHTML += `
                             <a href="https://pump.fun/${row.mint}" target="_blank">Pump Fun Link</a>
+                            <br>
+                            <a href="https://photon-sol.tinyastro.io/en/lp/${row.mint}" target="_blank">Photon Tiny Astro Link</a>
+                            <br>`;
+        if (row.twitter) innerHTML += `
+                            <a href="https://discover.beta.getmoni.io/${row.twitterUserName}" target="_blank">Discover Link</a>
+                            <br>`;
+        innerHTML += `
+                            <a href="https://dexscreener.com/solana/${row.mint}" target="_blank">DEX Screener Link</a>
+                            <br>
+                            <a href="https://gmgn.ai/sol/address/${row.mint}" target="_blank">GMGN Link</a>
                         </div>
                     </div>
                 `;
