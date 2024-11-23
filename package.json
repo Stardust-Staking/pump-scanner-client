@@ -2,11 +2,12 @@
   "name": "pump-scanner-client",
   "version": "1.0.0",
   "description": "",
-  "main": "public/index.html",
   "devDependencies": {
-    "gh-pages": "^6.2.0"
+    "gh-pages": "^6.2.0",
+    "parcel": "^2.13.0"
   },
   "scripts": {
+    "start": "parcel public/index.html",
     "deploy:pages": "gh-pages -d public/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -109,7 +109,10 @@
                             <p><strong>Twitter Description:</strong> ${row.twitterDescription}</p>
                             <p><strong>Twitter Followers:</strong> ${row.twitterFollowersCount}</p>
                             <p><strong>Created On:</strong> ${row.createdOn}</p>
-                            <p><strong>Market Cap (SOL):</strong> ${row.marketCapSol}</p>
+                            <p><strong>Market Cap:</strong> ${row.marketCapTrend ?
+                            "<br/>" + row.previousMarketCap + " &#8594 " + row.marketCap + " " +
+                              (row.marketCapTrend === "up" ? "&#8593" : "&#8595") :
+                            (row.marketCap ? row.marketCap : row.marketCapSol)}</p>
                             <br>`;
         if (row.twitter) innerHTML += `
                             <a href="${row.twitter}" target="_blank">${row.twitter}</a>
