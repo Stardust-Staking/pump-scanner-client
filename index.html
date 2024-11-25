@@ -109,9 +109,11 @@
                             <p><strong>Twitter Description:</strong> ${row.twitterDescription}</p>
                             <p><strong>Twitter Followers:</strong> ${row.twitterFollowersCount}</p>
                             <p><strong>Created On:</strong> ${row.createdOn}</p>
-                            <p><strong>Market Cap:</strong> ${row.marketCapTrend ?
-                            "<br/>" + row.previousMarketCap + " &#8594 " + row.marketCap + " " +
-                              (row.marketCapTrend === "up" ? "&#8593" : "&#8595") :
+                            <p><strong>Market Cap (SOL):</strong> ${row.marketCapTrend ?
+                            "<br/>" + row.previousMarketCap + "&nbsp;&#8594;&nbsp;" + row.marketCap + "&nbsp;" +
+                              (row.marketCapTrend === "up" ?
+                                "<span style=\"color: blue;\">&#8593;</span>" :
+                                "<span style=\"color:red;\">&#8595;</span>") :
                             (row.marketCap ? row.marketCap : row.marketCapSol)}</p>
                             <br>`;
         if (row.twitter) innerHTML += `
